@@ -90,22 +90,30 @@ func (me bot) listen(done chan struct{}) {
 			}
 			switch cmd {
 			case "hi", "hello":
-				user, _ := api.GetUserInfo(msg.ev.User)
-				me.reply(msg, "Hello ", user.RealName)
+				if user, err := api.GetUserInfo(msg.ev.User); err != nil {
+					me.reply(msg, "Hello ", user.RealName)
+				} else {
+					me.reply(msg, "Error: ", err.Error())
+				}
 			case "standup", "stand", "up":
-				// save standup
-				// need user-id, datetime, text
 				up := standup{who: msg.ev.User,
 					when: msg.ev.Timestamp,
 					what: data}
-				db.push(up)
-				me.reply(msg, "standup recorded")
-				if msg.is_private {
-					broadcast(msg.ev.User)
+				if err := db.push(up); err != nil {
+					me.reply(msg, "Error: ", err.Error())
+				} else {
+					me.reply(msg, "standup recorded")
+					if msg.is_private {
+						if err := broadcast(msg.ev.User); err != nil {
+							me.reply(msg, "Broadcast error: ", err.Error())
+						}
+					}
 				}
 			case "status", "stat":
 				me.reply(msg, "stat")
-				broadcast()
+				if err := broadcast(); err != nil {
+					me.reply(msg, "Broadcast error: ", err.Error())
+				}
 				// output all saved standups for today
 			default:
 				// send help
@@ -115,40 +123,33 @@ func (me bot) listen(done chan struct{}) {
 	}
 }
 
-func logiferr(err error) bool {
-	if err != nil {
-		logg.Println(err)
-		return true
-	}
-	return false
-}
-
-func broadcast(userids ...string) {
+func broadcast(userids ...string) error {
 	var err error
 	if len(userids) == 0 {
 		userids, err = db.users()
-		if logiferr(err) {
-			return
+		if logErr(err) {
+			return err
 		}
 	}
 	ups := make([]standup, len(userids))
 	for i, uid := range userids {
 		up, err := db.recent(uid)
-		up.who = uid
-		if logiferr(err) {
-			return
+		if logErr(err) {
+			return err
 		}
+		up.who = uid
 		ups[i] = up
 	}
 	chns, err := api.GetChannels(false)
-	if err != nil {
-		logg.Println(err)
+	if logErr(err) {
+		return err
 	}
 	for _, ch := range chns {
 		for _, up := range ups {
 			mess.sendMessage(up.String(), ch.ID)
 		}
 	}
+	return nil
 }
 
 // id comparison

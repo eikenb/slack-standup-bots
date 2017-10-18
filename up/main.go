@@ -27,7 +27,8 @@ func loop(me *bot) {
 			me.whoami(ev.Info.User)
 			me.start()
 		case *slack.MessageEvent:
-			ch, _ := api.GetChannelInfo(ev.Channel)
+			ch, err := api.GetChannelInfo(ev.Channel)
+			fatalErr(err)
 			is_private := (ch == nil) // private/direct chans have no info
 			// fmt.Printf("Message: %v\n", ev)
 			me.inbox <- botmsg{ev, is_private}

@@ -10,11 +10,10 @@ import (
 // slack abstraction and init
 var mess messengerer
 var api slacker
-var logg *log.Logger
 
 func init() {
-	logg := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
-	slack.SetLogger(logg)
+	slogger := log.New(os.Stdout, "slack-int: ", log.Lshortfile|log.LstdFlags)
+	slack.SetLogger(slogger)
 }
 
 type messengerer interface {

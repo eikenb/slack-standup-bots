@@ -41,7 +41,7 @@ func formatTimestamp(t string) string {
 		return ""
 	}
 	s, err := strconv.Atoi(ts[0])
-	if err != nil {
+	if logErr(err) {
 		return ""
 	}
 	tobj := time.Unix(int64(s), 0)
