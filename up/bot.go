@@ -109,7 +109,7 @@ func (me bot) listen(done chan struct{}) {
 				// output all saved standups for today
 			default:
 				// send help
-				me.reply(msg, "help")
+				me.reply(msg, help(me))
 			}
 		}
 	}

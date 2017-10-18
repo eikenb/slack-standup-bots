@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/nlopes/slack"
 )
@@ -9,6 +10,9 @@ import (
 // handle RTM event stream in main loop
 // forward on messages to bot
 func main() {
+	if len(os.Args) > 1 {
+		usage()
+	}
 	me := newBot()
 	loop(me)
 }
