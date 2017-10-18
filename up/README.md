@@ -1,27 +1,27 @@
-Up
---
+# Up
 
 Simple slack stand-up bot.
 
-Usage
------
+## Usage
 @up command (or in private channel)
 
-Commands:
+### Commands:
 
-standup <what you did yesterday, doing today, etc.>
-  How you enter your standup.
-  Echo's it back in main channel if you do it in private channel.
-  Free form. All 1 line.
+#### standup <what you did yesterday, doing today, etc.>
+How you enter your standup.  
+Echo's it back in main channel if you do it in private channel.  
+Free form. All 1 line.  
 
-status
-  Outputs everyone's most recent standup entries.
+#### status
+Outputs everyone's most recent standup entries.
 
-Eg.
+#### help
+Help output.
+
+### Eg.
 @up yesterday I worked on bug #1; today I worked on bug #2; no blockers
 
-Deployment
-----------
+## Deployment
 
 Requires 2 environment variables.
 
