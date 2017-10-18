@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/nlopes/slack"
@@ -39,4 +40,13 @@ func loop(me *bot) {
 			fmt.Printf("Event: %T; %v\n", ev, ev)
 		}
 	}
+}
+
+func healthcheck() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		if _, err := fmt.Fprintf(w, "ok"); err != nil {
+			logErr(err)
+		}
+	})
+	fatalErr(http.ListenAndServe(":8080", nil))
 }
