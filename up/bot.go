@@ -91,9 +91,9 @@ func (me bot) listen(done chan struct{}) {
 			switch cmd {
 			case "hi", "hello":
 				if user, err := api.GetUserInfo(msg.ev.User); err != nil {
-					me.reply(msg, "Hello ", user.RealName)
-				} else {
 					me.reply(msg, "Error: ", err.Error())
+				} else {
+					me.reply(msg, "Hello ", user.RealName)
 				}
 			case "standup", "stand", "up":
 				up := standup{who: msg.ev.User,
