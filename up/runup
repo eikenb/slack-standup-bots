@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ -e "$CONFIG" ] || { echo "Missing CONFIG env var"; exit 1; }
+config=$(basename ${CONFIG})
+
+cd $(dirname $0)
+. ./${config}
+./up
+

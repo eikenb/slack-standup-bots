@@ -26,6 +26,12 @@ Help output.
 Requires 2 environment variables.
 
 - SLACK_TOKEN - your slack bot api token.
-- REDIS_HOST  - hostname:port of redis server.
+- REDIS_HOST  - hostname:port of redis server
 
 Logs to STDOUT.
+
+If you are deploying using Docker and using the Dockerfile. Then you need
+create a 'runuprc' file with the 2 environment variables exported in it. Eg.
+
+    export SLACK_TOKEN=thisisnotarealtoken
+    export REDIS_HOST=localhost:6379
