@@ -1,5 +1,3 @@
-// +build live
-
 package main
 
 import (
