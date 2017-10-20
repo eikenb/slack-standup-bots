@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -13,7 +14,7 @@ func init() {
 
 func logErr(err error) bool {
 	if err != nil {
-		logger.Println(err)
+		logger.Output(2, fmt.Sprintln(err))
 		return true
 	}
 	return false
@@ -21,6 +22,7 @@ func logErr(err error) bool {
 
 func fatalErr(err error) {
 	if err != nil {
-		logger.Fatalln(err)
+		logger.Output(2, fmt.Sprintln(err))
+		os.Exit(1)
 	}
 }
