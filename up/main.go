@@ -30,7 +30,7 @@ func loop(me *bot) {
 			me.start()
 		case *slack.MessageEvent:
 			ch, err := api.GetChannelInfo(ev.Channel)
-			fatalErr(err)
+			logErr(err)
 			is_private := (ch == nil) // private/direct chans have no info
 			// fmt.Printf("Message: %v\n", ev)
 			me.inbox <- botmsg{ev, is_private}
@@ -38,7 +38,7 @@ func loop(me *bot) {
 			return // Used in testing
 		default:
 			// XXX log this?
-			fmt.Printf("Event: %T; %v\n", ev, ev)
+			logger.Printf("Event: %T; %v\n", ev, ev)
 		}
 	}
 }

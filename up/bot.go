@@ -95,8 +95,9 @@ func (me bot) listen(done chan struct{}) {
 				} else {
 					me.reply(msg, "Hello ", user.RealName)
 				}
-			case "standup", "stand", "up":
-				up := standup{who: msg.ev.User,
+			case "stand", "standup", "up":
+				userid := msg.ev.User
+				up := standup{who: userid,
 					when: msg.ev.Timestamp,
 					what: data}
 				if err := db.push(up); err != nil {
@@ -104,26 +105,29 @@ func (me bot) listen(done chan struct{}) {
 				} else {
 					me.reply(msg, "standup recorded")
 					if msg.is_private {
-						if err := broadcast(msg.ev.User); err != nil {
-							me.reply(msg, "Broadcast error: ", err.Error())
+						rmid, err := room()
+						if err != nil {
+							me.reply(msg, "Error: ", err.Error())
+						} else if err := show(rmid, userid); err != nil {
+							me.reply(msg, "Error: ", err.Error())
 						}
 					}
 				}
-			case "status", "stat":
+			case "show", "list", "status", "stat":
 				me.reply(msg, "stat")
-				if err := broadcast(); err != nil {
-					me.reply(msg, "Broadcast error: ", err.Error())
+				if err := show(msg.ev.Channel); err != nil {
+					me.reply(msg, "Error: ", err.Error())
 				}
-				// output all saved standups for today
-			default:
-				// send help
+			case "help", "?":
 				me.reply(msg, help(me))
+			default:
+				me.reply(msg, shorthelp(me))
 			}
 		}
 	}
 }
 
-func broadcast(userids ...string) error {
+func show(to string, userids ...string) error {
 	var err error
 	if len(userids) == 0 {
 		userids, err = db.users()
@@ -140,16 +144,21 @@ func broadcast(userids ...string) error {
 		up.who = uid
 		ups[i] = up
 	}
-	chns, err := api.GetChannels(false)
-	if logErr(err) {
-		return err
-	}
-	for _, ch := range chns {
-		for _, up := range ups {
-			mess.sendMessage(up.String(), ch.ID)
-		}
+	for _, up := range ups {
+		mess.sendMessage(up.String(), to)
 	}
 	return nil
+}
+
+func room() (string, error) {
+	chns, err := api.GetChannels(false)
+	if err == nil && len(chns) < 1 {
+		err = fmt.Errorf("No room found")
+	}
+	if logErr(err) {
+		return "", err
+	}
+	return chns[0].ID, nil
 }
 
 // id comparison
