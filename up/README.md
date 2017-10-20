@@ -7,19 +7,19 @@ Simple slack stand-up bot.
 
 ### Commands:
 
-#### standup <what you did yesterday, doing today, etc.>
+#### stand <what you did yesterday, doing today, etc.>
 How you enter your standup.  
 Echo's it back in main channel if you do it in private channel.  
 Free form. All 1 line.  
 
-#### status
+#### show
 Outputs everyone's most recent standup entries.
 
 #### help
 Help output.
 
 ### Eg.
-@up yesterday I worked on bug #1; today I worked on bug #2; no blockers
+@up stand yesterday I worked on bug #1; today I worked on bug #2; no blockers
 
 ## Deployment
 

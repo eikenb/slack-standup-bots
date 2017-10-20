@@ -13,19 +13,28 @@ func usage() {
 	os.Exit(1)
 }
 
+const short_help_tmpl = "@%s [stand][show][help]"
+
 const help_tmpl = `
 Usage: @%s command (or in private channel)
 Commands:
-    standup <what you did yesterday, doing today, etc.>
+    stand <what you did yesterday, doing today, etc.>
         How you enter your standup.
         Echo's it back in main channel if you do it in private channel.
         Free form. All 1 line.
-    status
+    show
         Outputs everyone's most recent standup entries.
+    help
+        Help output.
+
 Eg.
-@%s yesterday I worked on bug #1; today I worked on bug #2; no blockers
+@%s stand yesterday I worked on bug #1; today I worked on bug #2; no blockers
 `
 
 func help(me bot) string {
 	return fmt.Sprintf(help_tmpl, me.name, me.name)
+}
+
+func shorthelp(me bot) string {
+	return fmt.Sprintf(short_help_tmpl, me.name)
 }
