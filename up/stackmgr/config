@@ -1,0 +1,5 @@
+# vim: ft=sh
+
+DEPLOY_PARAMS="${DEPLOY_PARAMS}\
+    ParameterKey=InstanceType,ParameterValue=t2.micro"
+echo "Custom DEPLOY_PARAMS set."
