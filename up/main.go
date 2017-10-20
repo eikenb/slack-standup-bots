@@ -14,6 +14,7 @@ func main() {
 	if len(os.Args) > 1 {
 		usage()
 	}
+	go healthcheck()
 	me := newBot()
 	loop(me)
 }
