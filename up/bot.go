@@ -114,7 +114,6 @@ func (me bot) listen(done chan struct{}) {
 					}
 				}
 			case "show", "list", "status", "stat":
-				me.reply(msg, "stat")
 				if err := show(msg.ev.Channel); err != nil {
 					me.reply(msg, "Error: ", err.Error())
 				}
