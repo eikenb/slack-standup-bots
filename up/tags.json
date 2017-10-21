@@ -1,0 +1,30 @@
+[
+  {
+    "Key": "Name",
+    "Value": "up-bot"
+  },
+  {
+    "Key": "department",
+    "Value": "tie"
+  },
+  {
+    "Key": "owner",
+    "Value": "jeikenberry@comscore.com"
+  },
+  {
+    "Key": "approval",
+    "Value": "self-approved"
+  },
+  {
+    "Key": "project",
+    "Value": "up-bot"
+  },
+  {
+    "Key": "environment",
+    "Value": "dev"
+  },
+  {
+    "Key": "note",
+    "Value": "stackmgr setup"
+  }
+]
