@@ -36,9 +36,9 @@ func loop(me *bot) {
 			me.inbox <- botmsg{ev, is_private}
 		case exitLoop:
 			return // Used in testing
-		default:
-			// XXX log this?
+		case *slack.LatencyReport:
 			logger.Printf("Event: %T; %v\n", ev, ev)
+		default: // ignore everything else
 		}
 	}
 }
