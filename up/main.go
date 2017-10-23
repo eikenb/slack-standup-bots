@@ -26,14 +26,13 @@ func loop(me *bot) {
 	for msg := range mess.eventChan() {
 		switch ev := msg.Data.(type) {
 		case *slack.ConnectedEvent:
+			logger.Printf("Connected, Initializing bot...")
 			me.whoami(ev.Info.User)
 			me.start()
+			logger.Printf("Ready\n")
 		case *slack.MessageEvent:
-			ch, err := api.GetChannelInfo(ev.Channel)
-			logErr(err)
-			is_private := (ch == nil) // private/direct chans have no info
 			// fmt.Printf("Message: %v\n", ev)
-			me.inbox <- botmsg{ev, is_private}
+			me.inbox <- botmsg{ev, isDirectMessage(ev.Channel)}
 		case exitLoop:
 			return // Used in testing
 		case *slack.LatencyReport:
@@ -41,6 +40,21 @@ func loop(me *bot) {
 		default: // ignore everything else
 		}
 	}
+}
+
+// if channel has channelinfo, it is public
+// if channel has group info, it is private or group DM channel
+// if both are nil, it is a direct message channel
+func isDirectMessage(channel string) bool {
+	ch, err := api.GetChannelInfo(channel)
+	if err != nil && err.Error() != "channel_not_found" {
+		logger.Println(err)
+	}
+	gr, err := api.GetGroupInfo(channel)
+	if err != nil && err.Error() != "channel_not_found" {
+		logger.Println(err)
+	}
+	return (ch == nil && gr == nil)
 }
 
 func healthcheck() {

@@ -31,6 +31,7 @@ var (
 
 	testchannel  = makeTestChan(true)
 	otherchannel = makeTestChan(false)
+	privchannel  = &slack.Group{}
 )
 
 func makeTestChan(member bool) *slack.Channel {
@@ -55,6 +56,15 @@ type fakeSlack struct{}
 
 func (s fakeSlack) GetChannels(bool) ([]slack.Channel, error) {
 	return []slack.Channel{*testchannel}, nil
+}
+
+func (s fakeSlack) GetGroupInfo(name string) (*slack.Group, error) {
+	switch name {
+	case "privatechan":
+		return privchannel, nil
+	default:
+		return nil, fmt.Errorf("not_a_channel")
+	}
 }
 
 func (s fakeSlack) GetChannelInfo(name string) (*slack.Channel, error) {

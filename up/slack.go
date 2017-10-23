@@ -24,5 +24,6 @@ type messengerer interface {
 type slacker interface {
 	GetChannels(bool) ([]slack.Channel, error)
 	GetChannelInfo(string) (*slack.Channel, error)
+	GetGroupInfo(string) (*slack.Group, error)
 	GetUserInfo(string) (*slack.User, error)
 }

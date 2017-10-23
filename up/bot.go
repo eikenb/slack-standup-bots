@@ -10,8 +10,8 @@ import (
 
 // from slack
 type botmsg struct {
-	ev         *slack.MessageEvent
-	is_private bool
+	ev        *slack.MessageEvent
+	is_direct bool
 }
 
 // to slack
@@ -83,9 +83,9 @@ func (me bot) listen(done chan struct{}) {
 		case <-done:
 			return
 		case msg := <-me.inbox:
-			fmt.Println("inbox", msg.ev.Text, msg.ev.User)
+			// fmt.Println("inbox", msg.ev.Text, msg.ev.User)
 			if !me.toMe(msg) || me.isMe(msg.ev.User) {
-				fmt.Println("continue", !me.toMe(msg), me.isMe(msg.ev.User))
+				// fmt.Println("continue", !me.toMe(msg), me.isMe(msg.ev.User))
 				me.noreply(msg)
 				continue
 			}
@@ -111,7 +111,7 @@ func (me bot) listen(done chan struct{}) {
 					me.reply(msg, "Error: ", err.Error())
 				} else {
 					me.reply(msg, "standup recorded")
-					if msg.is_private {
+					if msg.is_direct {
 						rmid, err := room()
 						if err != nil {
 							me.reply(msg, "Error: ", err.Error())
@@ -176,8 +176,7 @@ func (me bot) isMe(id string) bool {
 
 // @addressed to me or in a private/direct channel
 func (me bot) toMe(msg botmsg) bool {
-	fmt.Println("toMe", strings.HasPrefix(msg.ev.Text, "<@"+me.id+">"), msg.is_private)
-	return (strings.HasPrefix(msg.ev.Text, "<@"+me.id+">") || msg.is_private)
+	return (strings.HasPrefix(msg.ev.Text, "<@"+me.id+">") || msg.is_direct)
 }
 
 func (me bot) String() string {
