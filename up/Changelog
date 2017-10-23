@@ -1,6 +1,7 @@
 2017-10-23  John Eikenberry <jeikenberry@comscore.com>
 
 	* Fixed issue with detecting private group channels
+	* Fixed issue with showing DM'd standup into private group channel
 
 2017-10-20  John Eikenberry <jeikenberry@comscore.com>
 
