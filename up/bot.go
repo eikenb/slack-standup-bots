@@ -8,11 +8,13 @@ import (
 	"github.com/nlopes/slack"
 )
 
+// from slack
 type botmsg struct {
 	ev         *slack.MessageEvent
 	is_private bool
 }
 
+// to slack
 type replymsg struct {
 	channel string
 	text    string
@@ -47,15 +49,19 @@ func (me bot) start() chan struct{} {
 	return done
 }
 
+// send reply message to outbox
 func (me bot) reply(msg botmsg, texts ...string) {
 	text := strings.Join(texts, "")
 	me.outbox <- replymsg{channel: msg.ev.Channel, text: text}
 }
 
+// we bot still replys even when it doesn't have anything to say
+// this makes testing much easier
 func (me bot) noreply(msg botmsg) {
 	me.outbox <- replymsg{channel: msg.ev.Channel}
 }
 
+// send reply messages to slack
 func (me bot) speak(done chan struct{}) {
 	for {
 		select {
@@ -70,15 +76,16 @@ func (me bot) speak(done chan struct{}) {
 	}
 }
 
+// listen for messages from slack
 func (me bot) listen(done chan struct{}) {
 	for {
 		select {
 		case <-done:
 			return
 		case msg := <-me.inbox:
-			// fmt.Println("inbox", msg.ev.Text)
+			fmt.Println("inbox", msg.ev.Text, msg.ev.User)
 			if !me.toMe(msg) || me.isMe(msg.ev.User) {
-				// fmt.Println("continue", !me.toMe(msg), me.isMe(msg.ev.User))
+				fmt.Println("continue", !me.toMe(msg), me.isMe(msg.ev.User))
 				me.noreply(msg)
 				continue
 			}
@@ -126,6 +133,7 @@ func (me bot) listen(done chan struct{}) {
 	}
 }
 
+// display standup info
 func show(to string, userids ...string) error {
 	var err error
 	if len(userids) == 0 {
@@ -149,6 +157,7 @@ func show(to string, userids ...string) error {
 	return nil
 }
 
+// get room/channel ID
 func room() (string, error) {
 	chns, err := api.GetChannels(false)
 	if err == nil && len(chns) < 1 {
@@ -167,6 +176,7 @@ func (me bot) isMe(id string) bool {
 
 // @addressed to me or in a private/direct channel
 func (me bot) toMe(msg botmsg) bool {
+	fmt.Println("toMe", strings.HasPrefix(msg.ev.Text, "<@"+me.id+">"), msg.is_private)
 	return (strings.HasPrefix(msg.ev.Text, "<@"+me.id+">") || msg.is_private)
 }
 
