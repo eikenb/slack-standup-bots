@@ -112,16 +112,15 @@ func (me bot) listen(done chan struct{}) {
 				} else {
 					me.reply(msg, "standup recorded")
 					if msg.is_direct {
-						rmid, err := room()
-						if err != nil {
-							me.reply(msg, "Error: ", err.Error())
-						} else if err := show(rmid, userid); err != nil {
-							me.reply(msg, "Error: ", err.Error())
+						for _, room := range rooms() {
+							if err := me.show(room, userid); err != nil {
+								me.reply(msg, "Error: ", err.Error())
+							}
 						}
 					}
 				}
 			case "show", "list", "status", "stat":
-				if err := show(msg.ev.Channel); err != nil {
+				if err := me.show(msg.ev.Channel); err != nil {
 					me.reply(msg, "Error: ", err.Error())
 				}
 			case "help", "?":
@@ -134,7 +133,7 @@ func (me bot) listen(done chan struct{}) {
 }
 
 // display standup info
-func show(to string, userids ...string) error {
+func (me bot) show(to string, userids ...string) error {
 	var err error
 	if len(userids) == 0 {
 		userids, err = db.users()
@@ -152,21 +151,25 @@ func show(to string, userids ...string) error {
 		ups[i] = up
 	}
 	for _, up := range ups {
-		mess.sendMessage(up.String(), to)
+		me.outbox <- replymsg{channel: to, text: up.String()}
 	}
 	return nil
 }
 
 // get room/channel ID
-func room() (string, error) {
+func rooms() []string {
+	var results []string
 	chns, err := api.GetChannels(false)
-	if err == nil && len(chns) < 1 {
-		err = fmt.Errorf("No room found")
+	logErr(err)
+	for _, ch := range chns {
+		results = append(results, ch.ID)
 	}
-	if logErr(err) {
-		return "", err
+	grps, err := api.GetGroups(false)
+	logErr(err)
+	for _, g := range grps {
+		results = append(results, g.ID)
 	}
-	return chns[0].ID, nil
+	return results
 }
 
 // id comparison

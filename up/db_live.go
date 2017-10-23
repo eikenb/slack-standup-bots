@@ -14,6 +14,7 @@ func init() {
 	}
 	conn, err := redis.Dial("tcp", host)
 	if err != nil {
+		fatalErr(err)
 	}
 	db = myDb{conn}
 }

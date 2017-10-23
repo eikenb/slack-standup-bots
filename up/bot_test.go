@@ -23,30 +23,56 @@ var message_tests = []test_pair{
 	// standup stat
 }
 
-func TestBotResponse(t *testing.T) {
+func TestBot(t *testing.T) {
 	me := newBot()
 	me.whoami(botuser_details)
 	done := make(chan struct{})
 	go me.listen(done)
-	for _, tp := range message_tests {
-		me.inbox <- tp.in
-		reply := <-me.outbox
-		assert.Equal(t, tp.out, reply)
-	}
+	t.Run("response", testBotResponse(me))
+	t.Run("save", testBotSave(me))
+	t.Run("show", testBotShow(me))
 	done <- struct{}{}
 }
 
-func TestBotSave(t *testing.T) {
-	me := newBot()
-	me.whoami(botuser_details)
-	done := me.start()
-	msg := botmsg{
-		ev: testMessageEvent("<@"+botid+"> standup foo", "testchannel")}
-	me.inbox <- msg
-	dbup, _ := db.recent("testuserid")
-	testup, _ := deserialize("testuserid;123.456;foo")
-	assert.Equal(t, testup, dbup)
-	done <- struct{}{}
+func testBotResponse(me *bot) func(*testing.T) {
+	return func(t *testing.T) {
+		for _, tp := range message_tests {
+			me.inbox <- tp.in
+			reply := <-me.outbox
+			assert.Equal(t, tp.out, reply)
+		}
+	}
+}
+
+func testBotSave(me *bot) func(*testing.T) {
+	return func(t *testing.T) {
+		msg := botmsg{
+			ev: testMessageEvent("<@"+botid+"> standup foo", "testchannel")}
+		me.inbox <- msg
+		dbup, _ := db.recent("testuserid")
+		testup, _ := deserialize("testuserid;123.456;foo")
+		assert.Equal(t, testup, dbup)
+		<-me.outbox
+	}
+}
+
+func testBotShow(me *bot) func(*testing.T) {
+	rep1 := replymsg{botid, "standup recorded"}
+	rep2 := replymsg{testchannel.ID, "foo"}
+	rep3 := replymsg{privgroup.ID, "foo"}
+	return func(t *testing.T) {
+		msg := botmsg{
+			ev: testMessageEvent("standup foo", botid), is_direct: true}
+		me.inbox <- msg
+		reply := <-me.outbox
+		assert.Equal(t, rep1, reply)
+		reply = <-me.outbox
+		assert.Equal(t, rep2.channel, reply.channel)
+		assert.Contains(t, reply.text, rep2.text)
+		reply = <-me.outbox
+		assert.Equal(t, rep3.channel, reply.channel)
+		assert.Contains(t, reply.text, rep3.text)
+	}
 }
 
 // helper code

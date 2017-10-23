@@ -29,13 +29,21 @@ var (
 
 	testuser, testuser_details = makeTestUser("testuserid")
 
-	testchannel  = makeTestChan(true)
-	otherchannel = makeTestChan(false)
-	privchannel  = &slack.Group{}
+	testchannel  = makeTestChan("testchanel", true)
+	otherchannel = makeTestChan("otherchannel", false)
+	privgroup    = makeTestGroup("privgroup")
 )
 
-func makeTestChan(member bool) *slack.Channel {
-	return &slack.Channel{IsMember: false}
+func makeTestChan(id string, member bool) *slack.Channel {
+	ch := &slack.Channel{IsMember: member}
+	ch.ID = id
+	return ch
+}
+
+func makeTestGroup(id string) *slack.Group {
+	gr := &slack.Group{IsGroup: true}
+	gr.ID = id
+	return gr
 }
 
 func makeTestUser(id string) (*slack.User, *slack.UserDetails) {
@@ -58,10 +66,14 @@ func (s fakeSlack) GetChannels(bool) ([]slack.Channel, error) {
 	return []slack.Channel{*testchannel}, nil
 }
 
+func (s fakeSlack) GetGroups(bool) ([]slack.Group, error) {
+	return []slack.Group{*privgroup}, nil
+}
+
 func (s fakeSlack) GetGroupInfo(name string) (*slack.Group, error) {
 	switch name {
 	case "privatechan":
-		return privchannel, nil
+		return privgroup, nil
 	default:
 		return nil, fmt.Errorf("not_a_channel")
 	}
