@@ -15,6 +15,8 @@ func (s standup) String() string {
 	var name string
 	if user, err := api.GetUserInfo(s.who); err == nil {
 		name = user.RealName
+	} else {
+		name = fmt.Sprintf("Missing user (%s)", s.who)
 	}
 	if s.what == "" {
 		return fmt.Sprintf("%s hasn't submitted a standup.", name)
