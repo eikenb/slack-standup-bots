@@ -1,9 +1,6 @@
 package main
 
 import (
-	"log"
-	"os"
-
 	"github.com/nlopes/slack"
 )
 
@@ -12,8 +9,7 @@ var mess messengerer
 var api slacker
 
 func init() {
-	slogger := log.New(os.Stdout, "slack-int: ", log.Lshortfile|log.LstdFlags)
-	slack.SetLogger(slogger)
+	slack.SetLogger(logger)
 }
 
 type messengerer interface {
