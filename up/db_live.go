@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"strings"
+	"time"
 
 	"github.com/garyburd/redigo/redis"
 )
@@ -12,7 +13,8 @@ func init() {
 	if !strings.HasSuffix(host, ":6379") {
 		host = host + ":6379"
 	}
-	conn, err := redis.Dial("tcp", host)
+	conn, err := redis.Dial("tcp", host,
+		redis.DialConnectTimeout(time.Second*10))
 	if err != nil {
 		fatalErr(err)
 	}
