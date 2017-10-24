@@ -14,7 +14,7 @@ func init() {
 
 func logErr(err error) bool {
 	if err != nil {
-		logger.Output(2, fmt.Sprintln(err))
+		logger.Output(2, "Error: "+fmt.Sprintln(err))
 		return true
 	}
 	return false
@@ -22,7 +22,7 @@ func logErr(err error) bool {
 
 func fatalErr(err error) {
 	if err != nil {
-		logger.Output(2, fmt.Sprintln(err))
+		logger.Output(2, "Fatal Error: "+fmt.Sprintln(err))
 		os.Exit(1)
 	}
 }
