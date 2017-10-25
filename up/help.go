@@ -13,7 +13,7 @@ func usage() {
 	os.Exit(1)
 }
 
-const short_help_tmpl = "@%s [stand][show][help]"
+const short_help_tmpl = "@%s [stand][append][show][help]"
 
 const help_tmpl = `
 Usage: @%s command (or in private channel)
@@ -22,6 +22,9 @@ Commands:
         How you enter your standup.
         Echo's it back in main channel if you do it in private channel.
         Free form. All 1 line.
+    append <additional standup info>
+        Append more information to your standup.
+        Simply adds it to the end, with a space separator.
     show
         Outputs everyone's most recent standup entries.
     help
