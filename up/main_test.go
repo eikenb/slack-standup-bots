@@ -36,7 +36,7 @@ func TestMainConnected(t *testing.T) {
 }
 
 // test that messages go to bot
-func TestMainBotInbox(t *testing.T) {
+func TestMainInbox(t *testing.T) {
 	me := newBot()
 	eventChan := mess.eventChan()
 	go loop(me)
