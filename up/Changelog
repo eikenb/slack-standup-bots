@@ -2,6 +2,7 @@
 
 	* fix init order issue
 	* better handle missing user accounts
+	* added append to standup feature
 
 2017-10-23  John Eikenberry <jeikenberry@comscore.com>
 

@@ -30,6 +30,9 @@ func TestBot(t *testing.T) {
 	go me.listen(done)
 	t.Run("response", testBotResponse(me))
 	t.Run("save", testBotSave(me))
+	db = myDb{make(fakedb)}
+	t.Run("append", testBotAppend(me))
+	db = myDb{make(fakedb)}
 	t.Run("show", testBotShow(me))
 	done <- struct{}{}
 }
@@ -56,11 +59,28 @@ func testBotSave(me *bot) func(*testing.T) {
 	}
 }
 
+func testBotAppend(me *bot) func(*testing.T) {
+	return func(t *testing.T) {
+		msg := botmsg{
+			ev: testMessageEvent("<@"+botid+"> standup foo", "testchannel")}
+		me.inbox <- msg
+		<-me.outbox
+		msg = botmsg{
+			ev: testMessageEvent("<@"+botid+"> append bar", "testchannel")}
+		me.inbox <- msg
+		dbup, _ := db.recent("testuserid")
+		testup, _ := deserialize("testuserid;123.456;foo bar")
+		assert.Equal(t, testup, dbup)
+		<-me.outbox
+	}
+}
+
 func testBotShow(me *bot) func(*testing.T) {
 	rep1 := replymsg{botid, "standup recorded"}
 	rep2 := replymsg{testchannel.ID, "foo"}
 	rep3 := replymsg{privgroup.ID, "foo"}
 	return func(t *testing.T) {
+		testBotSave(me)(t)
 		msg := botmsg{
 			ev: testMessageEvent("standup foo", botid), is_direct: true}
 		me.inbox <- msg

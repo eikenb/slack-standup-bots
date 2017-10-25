@@ -95,8 +95,8 @@ func (me bot) listen(done chan struct{}) {
 				cmd = cmdarr[0]
 				data = strings.TrimSpace(strings.TrimPrefix(text, cmd))
 			}
-			switch cmd {
-			case "hi", "hello":
+			switch strings.ToLower(cmd) {
+			case "hi", "hello", "hola":
 				if user, err := api.GetUserInfo(msg.ev.User); err != nil {
 					me.reply(msg, "Error: ", err.Error())
 				} else {
@@ -119,7 +119,14 @@ func (me bot) listen(done chan struct{}) {
 						}
 					}
 				}
-			case "show", "list", "status", "stat":
+			case "append", "ap":
+				up, err := db.recent(msg.ev.User)
+				if err != nil {
+					me.reply(msg, "Error: ", err.Error())
+				}
+				msg.ev.Text = "<@" + me.id + "> up " + up.what + " " + data
+				go func() { me.inbox <- msg }()
+			case "show", "ls":
 				if err := me.show(msg.ev.Channel); err != nil {
 					me.reply(msg, "Error: ", err.Error())
 				}
