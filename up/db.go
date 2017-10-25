@@ -4,7 +4,7 @@ import (
 	"github.com/garyburd/redigo/redis"
 )
 
-var db myDb
+var db myDber
 
 // storage
 type myDber interface {
