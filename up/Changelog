@@ -1,3 +1,7 @@
+2017-10-26  John Eikenberry <jeikenberry@comscore.com>
+
+	* change to use new rtm.connect method of slack API
+
 2017-10-24  John Eikenberry <jeikenberry@comscore.com>
 
 	* fix init order issue

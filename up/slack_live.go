@@ -22,7 +22,8 @@ func init() {
 	token := os.Getenv("SLACK_TOKEN")
 	// private names for non-interface calls
 	_api := slack.New(token)
-	_mess := mesenger{_api.NewRTM()}
+	_mess := mesenger{_api.NewRTMWithOptions(
+		&slack.RTMOptions{UseRTMStart: false})}
 	go _mess.ManageConnection()
 	// now assign to inteface types
 	api = _api
