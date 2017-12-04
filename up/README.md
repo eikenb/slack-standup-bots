@@ -35,3 +35,17 @@ create a 'runuprc' file with the 2 environment variables exported in it. Eg.
 
     export SLACK_TOKEN=thisisnotarealtoken
     export REDIS_HOST=localhost:6379
+
+Then update the Changelog (the version is derived from this file).
+
+Then...
+    make image
+    make push
+    make deploy
+
+If first time.
+To make the repo...
+    make repo
+To create-stack instead of update-stack...
+    make init
+
