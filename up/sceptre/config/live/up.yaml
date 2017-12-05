@@ -1,0 +1,32 @@
+---
+stack_name: up
+template_path: templates/deploy.yaml
+
+sceptre_user_data:
+  # you can use python template {variables} in this, see README.md for more
+  userdata_file: userdata.sh
+  # the tag of your docker image in ECR
+  ecr_tag: tie/up
+  # put your version here and reference it as a template variable in userdata
+  version: !command "head -1 ../Changelog | cut -d' ' -f1"
+
+hooks:
+  before_create:
+    - !set_cf_delegate_role_arn
+  before_update:
+    - !set_cf_delegate_role_arn
+  after_create:
+    - !enable_termination_protection
+  before_delete:
+    - !disable_termination_protection
+
+parameters:
+  AmiId: !ubuntu_ami
+  KeyName: tie:stackmgr:csps
+  VpcId: !vpc_id
+  Subnets: !subnet_ids application
+  ElbSubnets: !subnet_ids external
+  ElbScheme: "internet-facing"
+  UserData: !userdata # requires (at least) userdata_file above
+
+{% include 'tags.yaml' %}

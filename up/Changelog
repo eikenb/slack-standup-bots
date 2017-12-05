@@ -1,3 +1,7 @@
+2017-12-04  John Eikenberry <jeikenberry@comscore.com>
+
+	* new sceptre deploy setup
+
 2017-10-26  John Eikenberry <jeikenberry@comscore.com>
 
 	* change to use new rtm.connect method of slack API
@@ -16,3 +20,6 @@
 2017-10-20  John Eikenberry <jeikenberry@comscore.com>
 
 	* Initial release.
+
+# to create new entry in vim
+# <leader>o

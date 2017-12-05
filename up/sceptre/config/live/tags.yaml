@@ -1,0 +1,9 @@
+# Note the "Name" tag needs to be capitalized
+stack_tags:
+  Name: up
+  project: tie/up
+  owner: devops-west@comscore.com
+  department: tie
+  approval: jeikenberry@comscore.com
+  environment: tools
+  note: slack standup bot
