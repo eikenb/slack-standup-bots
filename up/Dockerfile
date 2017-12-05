@@ -13,7 +13,7 @@ FROM alpine:latest
 RUN apk --no-cache --update add ca-certificates
 WORKDIR /opt
 COPY --from=build-env /opt/src/up/up ./
-# uprc: file containing exported environment variables needed by up
+# runuprc: file containing exported environment variables needed by up
 ARG runuprc=runuprc
 ENV RUNUPRC=$runuprc
 COPY $RUNUPRC runup ./
