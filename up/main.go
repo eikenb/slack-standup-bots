@@ -63,5 +63,6 @@ func healthcheck() {
 			logErr(err)
 		}
 	})
+	logger.Printf("Healthcheck endpoint up.")
 	fatalErr(http.ListenAndServe(":8080", nil))
 }
