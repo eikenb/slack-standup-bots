@@ -27,4 +27,13 @@ tag:
 repo:
 	aws ecr create-repository --repository-name tie/up
 
+rm-old: login
+	aws ecr batch-delete-image --repository-name tie/up \
+		--image-ids $(shell \
+		aws ecr list-images --repository-name tie/up \
+			--filter tagStatus=UNTAGGED --query "imageIds[].imageDigest" \
+			--output text | xargs -n 1 | xargs -IXXX printf "imageDigest=XXX ")
 
+ls-old:
+	@aws ecr list-images --repository-name tie/up \
+		--filter tagStatus=UNTAGGED --query 'imageIds[].imageDigest'
