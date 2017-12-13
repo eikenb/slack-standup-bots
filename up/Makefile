@@ -20,6 +20,16 @@ deploy:
 login:
 	eval $$(aws ecr get-login --no-include-email)
 
+logs: asgname=$$(cd sceptre \
+	&& sceptre describe-stack-outputs --export envvar live up \
+	| grep serverG | cut -d= -f2)
+logs: instanceid=$$(aws autoscaling describe-auto-scaling-groups \
+	--auto-scaling-group-names ${asgname} \
+	--query 'AutoScalingGroups[0].Instances[0].InstanceId' --output text)
+logs:
+	@echo Pulling logs for group ${asgname} stream ${instanceid}
+	@aws logs pull --log-group-name tie/up --log-stream-name ${instanceid}
+
 # --
 tag:
 	docker tag tie/up ${ECR}/tie/up:${VERSION}
