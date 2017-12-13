@@ -155,3 +155,5 @@ Resources:
 Outputs:
   loadBalancerUrl:
     Value: !GetAtt loadBalancer.DNSName
+  asgName:
+    Value: !Ref serverGroup
