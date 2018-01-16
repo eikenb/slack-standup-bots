@@ -34,6 +34,7 @@ func loop(me *bot) {
 			// fmt.Printf("Message: %v\n", ev)
 			me.inbox <- botmsg{ev, isDirectMessage(ev.Channel)}
 		case exitLoop:
+			me.stop()
 			return // Used in testing
 		case *slack.LatencyReport:
 			logger.Printf("Event: %T; %v\n", ev, ev)

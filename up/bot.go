@@ -29,6 +29,7 @@ type bot struct {
 	id     string
 	inbox  chan botmsg
 	outbox chan replymsg
+	done   chan struct{}
 }
 
 func newBot() *bot {
@@ -39,14 +40,19 @@ func (me *bot) whoami(user *slack.UserDetails) {
 	me.id = user.ID
 }
 
-func (me bot) start() chan struct{} {
+func (me bot) start() {
 	if me.id == "" {
 		log.Fatal("Bot started before registered.")
 	}
-	done := make(chan struct{})
-	go me.listen(done)
-	go me.speak(done)
-	return done
+	me.done = make(chan struct{})
+	go me.listen()
+	go me.speak()
+}
+
+func (me bot) stop() {
+	if me.done != nil {
+		close(me.done)
+	}
 }
 
 // send reply message to outbox
@@ -62,10 +68,10 @@ func (me bot) noreply(msg botmsg) {
 }
 
 // send reply messages to slack
-func (me bot) speak(done chan struct{}) {
+func (me bot) speak() {
 	for {
 		select {
-		case <-done:
+		case <-me.done:
 			return
 		case msg := <-me.outbox:
 			if msg.noreply() {
@@ -77,10 +83,10 @@ func (me bot) speak(done chan struct{}) {
 }
 
 // listen for messages from slack
-func (me bot) listen(done chan struct{}) {
+func (me bot) listen() {
 	for {
 		select {
-		case <-done:
+		case <-me.done:
 			return
 		case msg := <-me.inbox:
 			// fmt.Println("inbox", msg.ev.Text, msg.ev.User)

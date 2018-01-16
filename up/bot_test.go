@@ -26,15 +26,14 @@ var message_tests = []test_pair{
 func TestBot(t *testing.T) {
 	me := newBot()
 	me.whoami(botuser_details)
-	done := make(chan struct{})
-	go me.listen(done)
+	go me.listen()
 	t.Run("response", testBotResponse(me))
 	t.Run("save", testBotSave(me))
 	db = myDb{make(fakedb)}
 	t.Run("append", testBotAppend(me))
 	db = myDb{make(fakedb)}
 	t.Run("show", testBotShow(me))
-	done <- struct{}{}
+	me.stop()
 }
 
 func testBotResponse(me *bot) func(*testing.T) {
