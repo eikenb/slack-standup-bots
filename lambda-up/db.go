@@ -47,7 +47,7 @@ type standup struct {
 }
 
 func (s standup) String(err error) string {
-	if err != nil {
+	if err != nil || s.Who == "" {
 		return ""
 	}
 	return fmt.Sprintf("%s - %s\n%s", s.Who, s.When, s.What)

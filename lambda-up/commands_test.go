@@ -62,6 +62,7 @@ func testAppendFunc(db dbi) func(t *testing.T) {
 	}
 }
 
+// sups is defined in db_test.go
 func testShowFunc(db dbi) func(t *testing.T) {
 	return func(t *testing.T) {
 		// USER provided
@@ -76,6 +77,7 @@ func testShowFunc(db dbi) func(t *testing.T) {
 		s, err = showFunc("nobody", testValues(), db)
 		assert.Error(t, err)
 		assert.Equal(t, "ResourceNotFoundException: ", err.Error())
+		assert.Equal(t, s, "")
 	}
 }
 func testShowAllFunc(db dbi) func(t *testing.T) {
