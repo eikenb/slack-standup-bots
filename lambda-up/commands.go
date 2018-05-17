@@ -40,6 +40,10 @@ func appendFunc(msg string, values url.Values, db dbi) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// strip off header (user - date) line
+	if prev := strings.SplitN(what, "\n", 2); len(prev) > 1 {
+		what = prev[1]
+	}
 	what = what + "\n" + msg
 	return standFunc(what, values, db)
 }
