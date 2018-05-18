@@ -14,25 +14,30 @@ var standCommand = command{
 	in_channel: true,
 }
 
+func newStandup(msg string, values url.Values) standup {
+	chan_name := values.Get("channel_name")
+	user_name := values.Get("user_name")
+	return standup{Where: chan_name, Who: user_name,
+		When: timestamp(), What: msg}
+}
+
 // allow overriding during testing
 var timestamp = func() string {
 	return time.Now().Format("2006.01.02-15:04:05")
 }
 
 func standFunc(msg string, values url.Values, db dbi) (string, error) {
-	chan_name := values.Get("channel_name")
-	user_name := values.Get("user_name")
-	stand := standup{Where: chan_name, Who: user_name,
-		When: timestamp(), What: msg}
+	stand := newStandup(msg, values)
 	err := db.putOne(stand)
-	return "standup recorded", err
+	return "standup recorded\n" + stand.String(), err
 }
 
 ////////////////////////////////////////////////////////////////////////
 // Append
 var appendCommand = command{
-	function: appendFunc,
-	help:     "append TEXT: append TEXT to current standup",
+	function:   appendFunc,
+	help:       "append TEXT: append TEXT to current standup",
+	in_channel: true,
 }
 
 func appendFunc(msg string, values url.Values, db dbi) (string, error) {
@@ -40,12 +45,15 @@ func appendFunc(msg string, values url.Values, db dbi) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	// strip off header (user - date) line
+	// strip off header ('user - date') line
 	if prev := strings.SplitN(what, "\n", 2); len(prev) > 1 {
 		what = prev[1]
 	}
-	what = what + "\n" + msg
-	return standFunc(what, values, db)
+	stand := newStandup(what+"\n"+msg, values)
+	if err := db.putOne(stand); err != nil {
+		return "", err
+	}
+	return "appended: " + newStandup(msg, values).String(), nil
 }
 
 ////////////////////////////////////////////////////////////////////////
