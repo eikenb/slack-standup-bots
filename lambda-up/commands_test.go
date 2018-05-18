@@ -70,11 +70,11 @@ func testShowFunc(db dbi) func(t *testing.T) {
 		// USER provided
 		s, err := showFunc("testuser", testValues(), db)
 		assert.NoError(t, err)
-		assert.Equal(t, sups[0].String(nil), s)
+		assert.Equal(t, sups[0].String(), s)
 		// no USER provided
 		s, err = showFunc("", testValues(), db)
 		assert.NoError(t, err)
-		assert.Equal(t, sups[0].String(nil), s)
+		assert.Equal(t, sups[0].String(), s)
 		// bad USER
 		s, err = showFunc("nobody", testValues(), db)
 		assert.Error(t, err)
@@ -85,7 +85,7 @@ func testShowFunc(db dbi) func(t *testing.T) {
 func testShowAllFunc(db dbi) func(t *testing.T) {
 	results := make([]string, len(sups))
 	for i, s := range sups {
-		results[i] = s.String(nil)
+		results[i] = s.String()
 	}
 	return func(t *testing.T) {
 		s, err := showAllFunc("", testValues(), db)

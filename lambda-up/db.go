@@ -46,8 +46,8 @@ type standup struct {
 	Where, Who, When, What string
 }
 
-func (s standup) String(err error) string {
-	if err != nil || s.Who == "" {
+func (s standup) String() string {
+	if s.Who == "" {
 		return ""
 	}
 	return fmt.Sprintf("%s - %s\n%s", s.Who, s.When, s.What)

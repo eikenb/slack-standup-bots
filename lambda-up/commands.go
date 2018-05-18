@@ -68,9 +68,8 @@ func showFunc(msg string, values url.Values, db dbi) (string, error) {
 		username = values.Get("user_name")
 	}
 	chan_name := values.Get("channel_name")
-	standup, err := db.getOne(chan_name, username)
-	msg = standup.String(err)
-	return standup.String(err), err
+	stand, err := db.getOne(chan_name, username)
+	return stand.String(), err
 }
 
 func showAllFunc(msg string, values url.Values, db dbi) (string, error) {
@@ -81,7 +80,7 @@ func showAllFunc(msg string, values url.Values, db dbi) (string, error) {
 	}
 	results := make([]string, len(standups))
 	for i, sup := range standups {
-		results[i] = sup.String(nil)
+		results[i] = sup.String()
 	}
 	return strings.Join(results, "\n"), nil
 }
