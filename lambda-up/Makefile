@@ -18,7 +18,7 @@ deploy:
 		--role-arn $$(cf.sh cfrole) --tags $$(cat tags.txt | tr '\n' ' ')
 
 output:
-	@aws cloudformation describe-stacks --stack-name upbot --query 'Stacks[0].Outputs[0].OutputValue' --output text
+	@echo $$(aws cloudformation describe-stacks --stack-name upbot --query 'Stacks[0].Outputs[0].OutputValue' --output text | sed 's/prod\//Prod/')/message
 
 test-stand:
 	curl --data-urlencode "token=nfTiev5lF9TJ5l3sJ3p6Sqd1" \
