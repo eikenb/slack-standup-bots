@@ -13,9 +13,10 @@ var required = [4]string{"token", "text", "channel_name", "user_name"}
 var commands = command{
 	help: "[show|stand|append|help] (help works on subcommands)",
 	subcommands: map[string]command{
-		"show":   showCommand,
-		"stand":  standCommand,
-		"append": appendCommand,
+		"show":    showCommand,
+		"stand":   standCommand,
+		"append":  appendCommand,
+		"welcome": welcomeCommand,
 	},
 }
 

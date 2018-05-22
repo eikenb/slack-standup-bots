@@ -69,7 +69,7 @@ func testCommandDispatch(t *testing.T) {
 	show_text := "testuser - now\nhello world"
 	test_dispatches := []cdtest{
 		{query: query("stand hello world"),
-			resp: channelResponse("standup recorded\n" + show_text)},
+			resp: channelResponse("Standup.... recorded!\n" + show_text)},
 		{query: query("show"),
 			resp: ephemeralResponse(show_text)},
 	}

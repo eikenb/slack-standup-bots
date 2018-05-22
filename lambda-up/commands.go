@@ -29,7 +29,7 @@ var timestamp = func() string {
 func standFunc(msg string, values url.Values, db dbi) (string, error) {
 	stand := newStandup(msg, values)
 	err := db.putOne(stand)
-	return "standup recorded\n" + stand.String(), err
+	return "Standup.... recorded!\n" + stand.String(), err
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ func appendFunc(msg string, values url.Values, db dbi) (string, error) {
 	if err := db.putOne(stand); err != nil {
 		return "", err
 	}
-	return "appended: " + newStandup(msg, values).String(), nil
+	return "Appended!\n" + newStandup(msg, values).String(), nil
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -91,4 +91,21 @@ func showAllFunc(msg string, values url.Values, db dbi) (string, error) {
 		results[i] = sup.String()
 	}
 	return strings.Join(results, "\n"), nil
+}
+
+////////////////////////////////////////////////////////////////////////
+// Welcome command
+const welcome = "Welcome humans!\n\n" +
+	"I am pleased to inform you of a new standup command.... `/up`!\n" +
+	"Please use it to record and view your standups.\n" +
+	"See `/up help` for more.\nThank you and goodnight."
+
+var welcomeCommand = command{
+	function:   welcomeFunc,
+	help:       "welcome: show welcome/intro message to channel",
+	in_channel: true,
+}
+
+func welcomeFunc(msg string, values url.Values, db dbi) (string, error) {
+	return welcome, nil
 }
