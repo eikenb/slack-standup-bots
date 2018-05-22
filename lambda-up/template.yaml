@@ -70,7 +70,9 @@ Resources:
       Environment:
         Variables:
           ENV: lambda
-          kmsEncryptedToken: "AQICAHh423AFYImRphKjAn5NbUuA+nfDg025bX68TX19pdEh+AGFcpnT4tYEdRH+Te633nwyAAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMGfkVE+GRIflrMQycAgEQgDPiBUa2Mysl3Q2bWA923O3AnnOf1LPEIqXlFrnIp5rI/KyCcgmCmfULcX3VQbD95W5hlsE="
+          kmsEncryptedToken: "AQICAHh423AFYImRphKjAn5NbUuA+nfDg025bX68TX19pdEh+AHTQ6AnlJiwx1tWpAk1ztf1AAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMc/gL5rq8kCsJuYB1AgEQgDPz5CrcIJkFHjFh5Q67lIsYKB52DVfT6ji8fu5p6qQaG4Tji2sVW0v6E7HXHQneWxLMBz4="
+          # testing token used with personal slack - eikenb
+          #kmsEncryptedToken: "AQICAHh423AFYImRphKjAn5NbUuA+nfDg025bX68TX19pdEh+AGFcpnT4tYEdRH+Te633nwyAAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMGfkVE+GRIflrMQycAgEQgDPiBUa2Mysl3Q2bWA923O3AnnOf1LPEIqXlFrnIp5rI/KyCcgmCmfULcX3VQbD95W5hlsE="
   # aws kms encrypt --output text --key-id alias/upbot --plaintext SECRET_TOKEN
   ApiLambdaPermission:
     Type: "AWS::Lambda::Permission"
