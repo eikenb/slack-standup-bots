@@ -30,12 +30,12 @@ While Logged into Slack with Admin privileges.
 
 To encrypt your token, run this command.
 
-    aws kms encrypt --key-id ALIAS --plaintext SECRET_TOKEN --output text
+    aws kms encrypt --key-id alias/upbot --plaintext SECRET_TOKEN --output text
 
-If you don't have an key w/ an ALIAS yet.
-First create a new key (if needed), then create the alias to it.
-Use that alias as ALIAS above.
+Note 'alias/upbot' is the current key in use in our setup. If you are setting this up fresh, switching accounts, etc. then see below.
+
+If you don't have an key w/ an ALIAS yet you should first create a new key,
+then create the alias to it and use that as ALIAS.
 
     aws kms create-key --description "key for slack bot"
     aws kms --alias-name ALIAS --target-key-id [KeyId from above]
-
