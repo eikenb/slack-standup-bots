@@ -85,4 +85,4 @@ Resources:
 Outputs:
   GatewayUrl:
     Description: 'API Gateway URL'
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/message"
