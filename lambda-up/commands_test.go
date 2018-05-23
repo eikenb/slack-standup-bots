@@ -80,7 +80,7 @@ func testShowFunc(db dbi) func(t *testing.T) {
 		s, err = showFunc("nobody", testValues(), db)
 		assert.Error(t, err)
 		assert.Equal(t, "ResourceNotFoundException: ", err.Error())
-		assert.Equal(t, s, "")
+		assert.Equal(t, s, "No standup found.")
 	}
 }
 func testShowAllFunc(db dbi) func(t *testing.T) {
