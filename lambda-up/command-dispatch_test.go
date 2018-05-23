@@ -66,12 +66,12 @@ func query(text string) string {
 }
 
 func testCommandDispatch(t *testing.T) {
-	show_text := "testuser - now\nhello world"
+
 	test_dispatches := []cdtest{
 		{query: query("stand hello world"),
-			resp: channelResponse("Standup.... recorded!\n" + show_text)},
+			resp: channelResponse("Standup.... recorded!")},
 		{query: query("show"),
-			resp: ephemeralResponse(show_text)},
+			resp: ephemeralResponse("testuser - now\nhello world")},
 	}
 	db := fakeDb()
 	for _, td := range test_dispatches {

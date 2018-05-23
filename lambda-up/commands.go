@@ -29,7 +29,7 @@ var timestamp = func() string {
 func standFunc(msg string, values url.Values, db dbi) (string, error) {
 	stand := newStandup(msg, values)
 	err := db.putOne(stand)
-	return "Standup.... recorded!\n" + stand.String(), err
+	return "Standup.... recorded!", err
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ func appendFunc(msg string, values url.Values, db dbi) (string, error) {
 	if err := db.putOne(stand); err != nil {
 		return "", err
 	}
-	return "Appended!\n" + newStandup(msg, values).String(), nil
+	return "Appended!", nil
 }
 
 ////////////////////////////////////////////////////////////////////////

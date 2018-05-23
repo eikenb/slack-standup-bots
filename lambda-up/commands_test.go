@@ -37,7 +37,7 @@ func testStandFunc(db dbi) func(t *testing.T) {
 		values := testValues()
 		out, err := standFunc("my standup", values, db)
 		assert.NoError(t, err)
-		assert.Equal(t, "Standup.... recorded!\ntestuser - now\nmy standup",
+		assert.Equal(t, "Standup.... recorded!",
 			out)
 		chan_name := values.Get("channel_name")
 		user_name := values.Get("user_name")
@@ -54,7 +54,7 @@ func testAppendFunc(db dbi) func(t *testing.T) {
 		values := testValues()
 		out, err := appendFunc("more standup", values, db)
 		assert.NoError(t, err)
-		assert.Equal(t, "Appended!\ntestuser - now\nmore standup", out)
+		assert.Equal(t, "Appended!", out)
 		out, err = appendFunc("wait", values, db)
 		assert.NoError(t, err)
 		chan_name := values.Get("channel_name")
