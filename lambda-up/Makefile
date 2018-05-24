@@ -5,7 +5,7 @@ STACKNAME=upbot
 help:
 	@cat Makefile | grep "^[a-z]\+:"
 
-all: build package deploy clean output
+all: build package deploy clean gateway-url
 
 build:
 	go build -ldflags="-w -s"
@@ -21,7 +21,7 @@ deploy:
 		--stack-name ${STACKNAME} --capabilities CAPABILITY_IAM \
 		--role-arn $$(cf.sh cfrole) --tags $$(cat tags.txt | tr '\n' ' ')
 
-output:
+gateway-url:
 	@echo aws cloudformation describe-stacks --stack-name ${STACKNAME} \
 		--query 'Stacks[0].Outputs[0].OutputValue' --output text
 
