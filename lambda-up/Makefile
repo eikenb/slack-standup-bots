@@ -22,7 +22,7 @@ deploy:
 		--role-arn $$(cf.sh cfrole) --tags $$(cat tags.txt | tr '\n' ' ')
 
 gateway-url:
-	@echo aws cloudformation describe-stacks --stack-name ${STACKNAME} \
+	@aws cloudformation describe-stacks --stack-name ${STACKNAME} \
 		--query 'Stacks[0].Outputs[0].OutputValue' --output text
 
 clean:
