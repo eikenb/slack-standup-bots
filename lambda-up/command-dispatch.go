@@ -17,6 +17,7 @@ var commands = command{
 		"stand":   standCommand,
 		"append":  appendCommand,
 		"welcome": welcomeCommand,
+		"debug":   debugCommand,
 	},
 }
 

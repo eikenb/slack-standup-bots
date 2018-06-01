@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/url"
 	"strings"
 	"time"
@@ -108,4 +109,15 @@ var welcomeCommand = command{
 
 func welcomeFunc(msg string, values url.Values, db dbi) (string, error) {
 	return welcome, nil
+}
+
+////////////////////////////////////////////////////////////////////////
+// Secret Debugging command
+var debugCommand = command{
+	function: debugFunc,
+	help:     "output whatever I want to check in live environment",
+}
+
+func debugFunc(msg string, values url.Values, db dbi) (string, error) {
+	return fmt.Sprint(values), nil
 }
