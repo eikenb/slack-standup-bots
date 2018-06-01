@@ -13,7 +13,7 @@ import (
 
 func testValues(text ...string) url.Values {
 	return url.Values{
-		"channel_name": []string{"foo"},
+		"channel_id":   []string{"foo"},
 		"user_name":    []string{"testuser"},
 		"response_url": []string{"slack-hook-url"},
 		"token":        []string{"slack-token"},
@@ -39,7 +39,7 @@ func testStandFunc(db dbi) func(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, "Standup.... recorded!",
 			out)
-		chan_name := values.Get("channel_name")
+		chan_name := values.Get("channel_id")
 		user_name := values.Get("user_name")
 		s, err := db.getOne(chan_name, user_name)
 		assert.NoError(t, err)
@@ -57,7 +57,7 @@ func testAppendFunc(db dbi) func(t *testing.T) {
 		assert.Equal(t, "Appended!", out)
 		out, err = appendFunc("wait", values, db)
 		assert.NoError(t, err)
-		chan_name := values.Get("channel_name")
+		chan_name := values.Get("channel_id")
 		user_name := values.Get("user_name")
 		s, err := db.getOne(chan_name, user_name)
 		assert.NoError(t, err)

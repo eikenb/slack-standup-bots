@@ -16,9 +16,9 @@ var standCommand = command{
 }
 
 func newStandup(msg string, values url.Values) standup {
-	chan_name := values.Get("channel_name")
+	channel_id := values.Get("channel_id")
 	user_name := values.Get("user_name")
-	return standup{Where: chan_name, Who: user_name,
+	return standup{Where: channel_id, Who: user_name,
 		When: timestamp(), What: msg}
 }
 
@@ -76,14 +76,14 @@ func showFunc(msg string, values url.Values, db dbi) (string, error) {
 	} else {
 		username = values.Get("user_name")
 	}
-	chan_name := values.Get("channel_name")
-	stand, err := db.getOne(chan_name, username)
+	channel_id := values.Get("channel_id")
+	stand, err := db.getOne(channel_id, username)
 	return stand.String(), err
 }
 
 func showAllFunc(msg string, values url.Values, db dbi) (string, error) {
-	chan_name := values.Get("channel_name")
-	standups, err := db.getAll(chan_name)
+	channel_id := values.Get("channel_id")
+	standups, err := db.getAll(channel_id)
 	if err != nil {
 		return "", err
 	}
